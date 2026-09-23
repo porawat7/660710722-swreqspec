@@ -73,3 +73,12 @@
 - ผลลัพธ์: ตรวจทาน `tasks.md` เดิมเทียบกับ `spec.md`, `plan.md` และ `AGENTS.md`; ไม่พบข้อกำหนดที่ต้องแก้ไขและยังไม่เริ่มทำ task ใด
 - สรุป: คงไว้ 16 tasks โดยมี 4 tasks รอ Q-02 ได้แก่ T-08, T-09, T-15 และ T-16
 - การตรวจครบ: AC-BKG-01 ถึง AC-BKG-06 และ Constraint ทั้งหมดมี task อ้างอิงครบ
+
+---
+
+## 2569-09-23 15:27 คำสั่ง: /implement T-13 specs/001-booking/tasks.md
+
+- ไฟล์ที่สร้างหรือแก้: `frontend/src/pages/SlotPicker.jsx`, `frontend/src/__tests__/SlotPicker.test.jsx`, `frontend/src/api/client.js`, `frontend/src/App.jsx`
+- ผล test: `cd frontend && npm test -- --run src/__tests__/SlotPicker.test.jsx` ผ่าน 1 test
+- ผลลัพธ์: หน้าเลือกแพ็กเกจและช่วงเวลาแสดงช่วงเวลาตรวจ/ที่นั่งคงเหลือ และโหลดข้อมูลใหม่เมื่อเปลี่ยนแพ็กเกจด้วย API จำลอง
+- สิ่งที่เกือบต้องเดา: spec ไม่กำหนดค่ารหัสแพ็กเกจ จึงใช้ช่องกรอกรหัสแพ็กเกจแทนการกำหนดรายการแพ็กเกจตายตัว
