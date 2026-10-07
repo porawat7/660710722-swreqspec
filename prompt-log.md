@@ -79,3 +79,12 @@
 - ผลลัพธ์: สร้าง [specs/001-booking/rtm.md](./specs/001-booking/rtm.md) และบันทึก traceability matrix เป็นภาคผนวกของการตรวจเทียบ spec กับ implementation/test
 - สรุป: AC-BKG-01 และ AC-BKG-05 มีหลักฐานผ่าน; FR-BKG-02, FR-BKG-03, FR-BKG-05, DOM-PDPA-01, IF-HIS-01, IF-NOT-01 และ NFR-REL-02 ยังไม่ครอบคลุมและต้องรอ task/T-04/T-05/T-07/T-08/T-09
 - ข้อค้นพบสำคัญ: Q-02 ยังไม่ได้คำตอบ ทำให้รูปแบบและการรีเซ็ตหมายเลขคิวยังไม่ยืนยันได้
+
+---
+
+## 2569-10-07 09:06 คำสั่ง: /verify specs/001-booking/ (หลังแก้ UI เพจ ConfirmBooking)
+
+- เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
+- ผลลัพธ์: ปรับ UI [frontend/src/pages/ConfirmBooking.jsx](../../frontend/src/pages/ConfirmBooking.jsx) ให้แสดงข้อความ "ช่วงเวลาเต็ม" และแสดง 3 ตัวเลือกตาม spec (ไม่รวมปุ่มยกเลิกการจองตาม Out of scope)
+- ตรวจสอบ: `cd frontend && npm test -- src/__tests__/AC-BKG-03.test.jsx`
+- ผลลัพธ์: test ยังไม่ผ่าน เนื่องจากไฟล์ [frontend/src/__tests__/AC-BKG-03.test.jsx](../../frontend/src/__tests__/AC-BKG-03.test.jsx) มี `expect(...)` ที่อยู่นอก function `test(...)` บรรทัด 23-24 ซึ่งเป็นข้อผิดพลาดของตัว test เอง ไม่ใช่การผิดพลาดของ component ตามเงื่อนไขที่สั่ง "ห้ามแก้ test" จึงไม่ปรับไฟล์ test

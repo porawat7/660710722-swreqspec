@@ -19,3 +19,6 @@ test('AC-BKG-03 ช่วงเวลาเต็ม แจ้งผู้ใช
   expect(alert.textContent).toContain('เต็ม')
   expect(screen.getAllByText('เลือกช่วงนี้').length).toBeGreaterThan(0)
 })
+
+expect(alert.textContent).toContain('ช่วงเวลาเต็ม')
+expect(screen.getAllByText('เลือกช่วงนี้').length).toBe(3)

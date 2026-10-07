@@ -14,7 +14,7 @@
 |---|---|---|---|---|---|
 | FR-BKG-01 | Functional | แสดงช่วงเวลาว่างภายใน 30 วัน พร้อมจำนวนที่นั่งคงเหลือ | [backend/app/slots/router.py](../../backend/app/slots/router.py), [backend/app/slots/service.py](../../backend/app/slots/service.py), [backend/tests/test_AC_BKG_05.py](../../backend/tests/test_AC_BKG_05.py) | บางส่วน | API GET /slots มีอยู่และ filter ตาม package_code แต่ยังไม่มี test case ครบสำหรับทุกเงื่อนไขของ FR-BKG-01 |
 | FR-BKG-02 | Functional | ปฏิเสธการจองเมื่อมีคิวที่ยังไม่ได้ใช้ในวันเดียวกัน | ไม่มีหลักฐาน | ยังไม่ครอบคลุม | task T-04 รอทำ |
-| FR-BKG-03 | Functional | แจ้งช่วงเวลาเต็มและเสนอ 3 ตัวเลือกใกล้เคียง | ไม่มีหลักฐาน | ยังไม่ครอบคลุม | task T-05, T-11, T-12 รอทำ |
+| FR-BKG-03 | Functional | แจ้งช่วงเวลาเต็มและเสนอ 3 ตัวเลือกใกล้เคียง | [frontend/src/pages/ConfirmBooking.jsx](../../frontend/src/pages/ConfirmBooking.jsx) | บางส่วน | UI ปรับให้แสดงข้อความ "ช่วงเวลาเต็ม" และ 3 ตัวเลือกตาม spec แล้ว แต่ยังต้องใช้ test ที่ถูกต้องจากแถว AC-BKG-03 เนื่องจากไฟล์ test ปัจจุบันมี assertion นอก test block |
 | FR-BKG-04 | Functional | บันทึกการจอง ตัดที่นั่ง ออกหมายเลขคิว และส่งคำขอส่งข้อความยืนยัน | [backend/app/booking/service.py](../../backend/app/booking/service.py), [backend/app/booking/router.py](../../backend/app/booking/router.py), [backend/tests/test_AC_BKG_01.py](../../backend/tests/test_AC_BKG_01.py) | ผ่าน | มี test สำหรับ AC-BKG-01 และกฎปฏิเสธเมื่อ `remaining <= 0` แล้ว; queue format ยังติด Q-02 |
 | FR-BKG-05 | Functional | หากส่งข้อความไม่สำเร็จ ต้องบันทึกการจองและส่งซ้ำภายใน 5 นาที | ไม่มีหลักฐาน | ยังไม่ครอบคลุม | task T-07 รอทำ |
 | FR-BKG-06 | Functional | คำนวณช่วงว่างใหม่ตามแพ็กเกจที่เลือก | [backend/app/slots/service.py](../../backend/app/slots/service.py) | บางส่วน | โครงฟังก์ชันเห็นได้ แต่ยังไม่มี AC ที่ครอบคลุม specific flow ครบ |
@@ -29,7 +29,7 @@
 | IF-NOT-01 | Interface | ส่งข้อความยืนยันผ่านระบบแจ้งเตือนแบบ asynchronous | ไม่มีหลักฐาน | ยังไม่ครอบคลุม | task T-07 รอทำ |
 | AC-BKG-01 | Acceptance Criteria | ยืนยันตัวตนแล้วและช่วง 09.00 มีที่นั่งว่าง 1 ที่ จองสำเร็จ | [backend/tests/test_AC_BKG_01.py](../../backend/tests/test_AC_BKG_01.py) | ผ่าน | มี test สำหรับทางปกติ/ขอบ/ทางผิดแล้วเห็นว่าผ่าน |
 | AC-BKG-02 | Acceptance Criteria | ปฏิเสธและแสดงหมายเลขคิวเดิมเมื่อมีคิวที่ยังไม่ได้ใช้ | ไม่มีหลักฐาน | ยังไม่ครอบคลุม | ไม่มี test case ที่สถานะใช้ได้ และ task T-04 ยังไม่เริ่ม |
-| AC-BKG-03 | Acceptance Criteria | แจ้งช่วงเวลาเต็มและแสดง 3 ตัวเลือกที่ใกล้ที่สุด | ไม่มีหลักฐาน | ยังไม่ครอบคลุม | task T-05, T-11, T-12 รอทำ |
+| AC-BKG-03 | Acceptance Criteria | แจ้งช่วงเวลาเต็มและแสดง 3 ตัวเลือกที่ใกล้ที่สุด | [frontend/src/pages/ConfirmBooking.jsx](../../frontend/src/pages/ConfirmBooking.jsx), [frontend/src/__tests__/AC-BKG-03.test.jsx](../../frontend/src/__tests__/AC-BKG-03.test.jsx) | บางส่วน | UI ปรับให้สอดคล้องกับ spec แล้ว แต่ test file ปัจจุบันมี assertion ที่อยู่นอก test block ทำให้ verifier ไม่สามารถยืนยัน pass ได้ โดยไม่แก้ test ตามเงื่อนไข |
 | AC-BKG-04 | Acceptance Criteria | จองถูกบันทึกและมีคิวส่งซ้ำภายใน 5 นาที | ไม่มีหลักฐาน | ยังไม่ครอบคลุม | task T-07 รอทำ |
 | AC-BKG-05 | Acceptance Criteria | p95 <= 2 วินาที | [backend/tests/test_AC_BKG_05.py](../../backend/tests/test_AC_BKG_05.py) | ผ่าน | test แบบย่อส่วนผ่าน |
 | AC-BKG-06 | Acceptance Criteria | มี audit log ระบุผู้เข้าถึง เวลา และรหัสผู้รับบริการ | ไม่มีหลักฐาน | ยังไม่ครอบคลุม | task T-08 รอทำ |
