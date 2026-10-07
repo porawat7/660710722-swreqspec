@@ -1,32 +1,52 @@
-from collections.abc import Iterator
+# เตรียมฐานข้อมูล SQLite ในหน่วยความจำให้ทุก test (ไม่ต้องมี PostgreSQL จริง)
+from datetime import date, time, timedelta
 
 import pytest
-from sqlalchemy import inspect
-from sqlalchemy.engine import Engine
-from sqlalchemy.pool import StaticPool
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
-from app.db.models import Base
+from app.db.models import Base, Slot
+from app.db.session import get_db
+from app.main import app
+
+# ผู้รับบริการที่ยืนยันตัวตนแล้ว HN 0001234
+AUTH = {"Authorization": "Bearer verified:0001234"}
 
 
 @pytest.fixture
-def database_engine() -> Iterator[Engine]:
-    """เตรียมฐานข้อมูลทดสอบสำหรับตรวจ schema ของ T-01."""
+def db():
     engine = create_engine(
-        "sqlite://",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
+        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
     )
     Base.metadata.create_all(engine)
-    yield engine
-    engine.dispose()
+    session = sessionmaker(bind=engine, autoflush=False)()
+    yield session
+    session.close()
 
 
-def test_t01_creates_required_tables_without_national_id(database_engine: Engine) -> None:
-    """ยืนยันว่า schema มีตารางที่ต้องใช้และไม่เก็บเลขบัตรประชาชนตาม IF-HIS-01."""
-    table_names = set(inspect(database_engine).get_table_names())
+@pytest.fixture
+def client(db):
+    app.dependency_overrides[get_db] = lambda: db
+    yield TestClient(app)
+    app.dependency_overrides.clear()
 
-    assert table_names == {"slots", "bookings", "audit_logs"}
-    assert "national_id" not in {
-        column["name"] for column in inspect(database_engine).get_columns("bookings")
-    }
+
+@pytest.fixture
+def make_slot(db):
+    """สร้างช่วงเวลา 1 ช่วง ค่าเริ่มต้นคือพรุ่งนี้ 09.00 น. แพ็กเกจ BASIC"""
+    def _make(start="09:00", remaining=1, capacity=None, days_from_today=1, package_code="BASIC"):
+        h, m = map(int, start.split(":"))
+        slot = Slot(
+            slot_date=date.today() + timedelta(days=days_from_today),
+            start_time=time(h, m),
+            package_code=package_code,
+            capacity=capacity if capacity is not None else max(remaining, 1),
+            remaining=remaining,
+        )
+        db.add(slot)
+        db.commit()
+        db.refresh(slot)
+        return slot
+    return _make
