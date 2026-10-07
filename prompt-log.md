@@ -70,3 +70,12 @@
 - สาเหตุ: test_TC_BKG_01_2_booking_at_capacity_limit ไม่ผ่าน เนื่องจาก `create_booking()` ยอมจองเมื่อ `slot.remaining == 0` เพราะตรวจแค่ `< 0` เท่านั้น
 - การแก้ไข: เปลี่ยนเงื่อนไขจาก `if slot.remaining < 0` เป็น `if slot.remaining <= 0` เพื่อปฏิเสธเมื่อไม่มีที่นั่งเหลือ
 - ผล test: `cd backend && pytest -v tests/test_AC_BKG_01.py` -> 4 passed, 1 warning
+
+---
+
+## 2569-10-07 08:40 คำสั่ง: /verify specs/001-booking/
+
+- เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
+- ผลลัพธ์: สร้าง [specs/001-booking/rtm.md](./specs/001-booking/rtm.md) และบันทึก traceability matrix เป็นภาคผนวกของการตรวจเทียบ spec กับ implementation/test
+- สรุป: AC-BKG-01 และ AC-BKG-05 มีหลักฐานผ่าน; FR-BKG-02, FR-BKG-03, FR-BKG-05, DOM-PDPA-01, IF-HIS-01, IF-NOT-01 และ NFR-REL-02 ยังไม่ครอบคลุมและต้องรอ task/T-04/T-05/T-07/T-08/T-09
+- ข้อค้นพบสำคัญ: Q-02 ยังไม่ได้คำตอบ ทำให้รูปแบบและการรีเซ็ตหมายเลขคิวยังไม่ยืนยันได้
