@@ -52,3 +52,21 @@
 - เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
 - ผลลัพธ์: พบ AC-BKG-01 ยังไม่มีแถวใน specs/001-booking/test-cases.md จึงเพิ่ม test cases แบบทางปกติ / ขอบ / ทางผิด สถานะ "ร่าง" 3 แถว
 - ส่วนที่ต้องให้ทีมตรวจต่อ: รูปแบบหมายเลขคิวยังติด Q-02 (FR-BKG-04, T-06) ดังนั้นเซกเมนต์ "แสดงหมายเลขคิว" จึงคงค้างไว้ว่า "(รอ Q-02)" และไม่กำหนด assert รูปแบบเลขคิวใน test cases ร่าง
+
+---
+
+## 2569-10-07 08:31 คำสั่ง: /testcases AC-BKG-01 specs/001-booking/
+
+- เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
+- ผลลัพธ์: ตรวจพบแถว AC-BKG-01 ใน specs/001-booking/test-cases.md มีสถานะ "ใช้ได้" แล้ว จึงเพิ่ม test 3 แถวต่อท้าย backend/tests/test_AC_BKG_01.py ตามชื่อ test ที่ระบุในตาราง
+- เขียนทดสอบ: ทางปกติ / ขอบ / ทางผิด โดยมี comment # Given / # When / # Then ตามคำสั่ง
+- ผล test: `cd backend && pytest tests/test_AC_BKG_01.py -q` -> 4 passed
+
+---
+
+## 2569-10-07 08:38 คำสั่ง: แก้ไขเฉพาะ backend/app/booking/service.py สำหรับ AC-BKG-01-2
+
+- เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
+- สาเหตุ: test_TC_BKG_01_2_booking_at_capacity_limit ไม่ผ่าน เนื่องจาก `create_booking()` ยอมจองเมื่อ `slot.remaining == 0` เพราะตรวจแค่ `< 0` เท่านั้น
+- การแก้ไข: เปลี่ยนเงื่อนไขจาก `if slot.remaining < 0` เป็น `if slot.remaining <= 0` เพื่อปฏิเสธเมื่อไม่มีที่นั่งเหลือ
+- ผล test: `cd backend && pytest -v tests/test_AC_BKG_01.py` -> 4 passed, 1 warning
